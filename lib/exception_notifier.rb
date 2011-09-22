@@ -28,10 +28,22 @@ class ExceptionNotifier
     options.reverse_merge!(@options)
 
     unless Array.wrap(options[:ignore_exceptions]).include?(exception.class)
-      Notifier.exception_notification(env, exception).deliver
-      env['exception_notifier.delivered'] = true
+      unless ignore_crawler_match?(env['HTTP_USER_AGENT'])
+        Notifier.exception_notification(env, exception).deliver
+        env['exception_notifier.delivered'] = true
+      else
+        Rails.logger.info "ExceptionNotifier ignored the exception by \"#{env['HTTP_USER_AGENT']}\""
+      end
     end
 
     raise exception
+  end
+
+  private
+  def ignore_crawler_match?(user_agent)
+    @options[:ignore_crawler].each do |crawler|
+      return true if !!(user_agent =~ Regexp.new(crawler))
+    end if @options[:ignore_crawler]
+    false
   end
 end

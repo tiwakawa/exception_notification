@@ -56,7 +56,8 @@ describe application-specific data--just add the section's name to the list
 	   :email_prefix => "[Whatever] ",
 	   :sender_address => %{"notifier" <notifier@example.com>},
 	   :exception_recipients => %w{exceptions@example.com},
-	   :sections => %w{my_section1 my_section2} + ExceptionNotifier::Notifier.default_sections
+	   :sections => %w{my_section1 my_section2} + ExceptionNotifier::Notifier.default_sections,
+	   :ignore_crawler => %w{Y!J- Googlebot}
 
 If your new section requires information that isn't available by default, make sure
 it is made available to the email using the exception_data macro:
