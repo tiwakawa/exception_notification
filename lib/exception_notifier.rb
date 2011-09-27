@@ -33,6 +33,7 @@ class ExceptionNotifier
         env['exception_notifier.delivered'] = true
       else
         Rails.logger.info "ExceptionNotifier ignored the exception by \"#{env['HTTP_USER_AGENT']}\""
+        Rails.logger.flush
       end
     end
 
